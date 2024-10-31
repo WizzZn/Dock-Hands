@@ -800,7 +800,13 @@ MonoBehaviour:
   - {fileID: 943479470}
   - {fileID: 1673248794}
   - {fileID: 1703595264}
+  contSlotePos:
+  - {fileID: 329450746116953754}
+  - {fileID: 5999030269924035301}
+  - {fileID: 7797343795578043797}
   isContin: {fileID: 0}
+  smoke: {fileID: 5489048566356604571, guid: 089ca92aa00c0b74b9b4c250438dcdd7, type: 3}
+  speed: 0.001
 --- !u!4 &209482478
 Transform:
   m_ObjectHideFlags: 0
