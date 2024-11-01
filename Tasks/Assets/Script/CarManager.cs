@@ -95,6 +95,13 @@ public class CarManager : PathFollower
 
             }
         }
+        if (other.gameObject.CompareTag("HitContiner"))
+        {
+            reverse = true;
+            moveCar = true;
+            Debug.Log("Car crashed!!");
+            Invoke("TimeDelay", 2f);
+        }
        
     }
     private void TimeDelay()

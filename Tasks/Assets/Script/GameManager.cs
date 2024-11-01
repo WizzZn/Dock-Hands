@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject isContin;
     public ParticleSystem smoke;
     public float speed;
+    public GameObject greBoat,orgBoat;
 
     //private GameObject[] contSlote = new GameObject[3];
     private GameObject[] slote = new GameObject[5];
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
         {
             gameManagerInstance = this;
         }
-        
+        MoveToShip();
         countTrack = GameObject.FindGameObjectsWithTag("Path").Length;
         numberOfMoves = countTrack + 5;
         sigma = -1;
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour
                 slote[i] = isContin;
                 MoveToSlote();
                 tochLock = true;
-                sigma++;
+                sigma = i;
                 spic = true;
                 for (int j = 1; j < 4; j++)
                 {
@@ -67,7 +68,23 @@ public class GameManager : MonoBehaviour
                         countOrg++;
                         if (countOrg == 3)
                         {
-                           // MoveToShip();
+                          /*  for (int l = 0; l < slote.Length ; l++)
+                            {
+                                for (int k = 0; k < contOrg.Length ; k++)
+                                {
+                                    if (contOrg[k].name == slote[l].name)
+                                    {
+                                        slote[l] = null;
+                                        spic = false;
+                                    }
+                                    break;
+                                }
+
+                            }*/
+                            
+
+
+                          
                         }
                     }
                     else if(slote[i].name == gre)
@@ -77,7 +94,7 @@ public class GameManager : MonoBehaviour
 
                         if (countGre == 3)
                         {
-                            MoveToShip();
+                            
 
                         }
                     }
@@ -96,19 +113,60 @@ public class GameManager : MonoBehaviour
         {
             isContin.transform.position = Vector3.MoveTowards(isContin. transform.position, slotePoss[sigma].transform.position, speed );
             isContin.transform.localEulerAngles = new Vector3(0, 180, 0);
+           
         }
        
     }
     private void MoveToShip()
     {
-        contGre[0].transform.position = Vector3.MoveTowards(transform.position, contSlotePos[0].transform.position,speed );
-        contGre[1].transform.position = Vector3.MoveTowards(transform.position, contSlotePos[1].transform.position,  speed );
-        contGre[2].transform.position = Vector3.MoveTowards(transform.position, contSlotePos[2].transform.position, speed );
 
+        BoatMove.boatMoveInstance.starter = true;
 
     }
     private void Update()
     {
         MoveToSlote();
+    }
+   
+  
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Green"))
+        {
+            Debug.Log("hit");
+            BoatMove.boatMoveInstance.starter = false;
+
+            if (countGre == 3)
+            {
+                contGre[0].SetActive(false);
+                contGre[1].SetActive(false);
+                contGre[2].SetActive(false);
+                greBoat.transform.GetChild(0).gameObject.SetActive(true);
+                BoatMove.boatMoveInstance.starter = true;
+            }
+        }
+        if (other.gameObject.CompareTag("Orange"))
+        {
+            Debug.Log("hit");
+            BoatMove.boatMoveInstance.starter = false;
+
+            if (countOrg == 3)
+            {
+                contOrg[0].SetActive(false);
+                contOrg[1].SetActive(false);
+                contOrg[2].SetActive(false);
+                orgBoat.transform.GetChild(0).gameObject.SetActive(true);
+                BoatMove.boatMoveInstance.starter = true;
+
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Green"))
+        {
+            orgBoat.AddComponent<BoatMove>();
+
+        }
     }
 }

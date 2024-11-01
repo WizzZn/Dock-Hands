@@ -8,6 +8,9 @@ TagManager:
   - Path
   - Continer
   - Road
+  - Green
+  - Orange
+  - HitContiner
   layers:
   - Default
   - TransparentFX
