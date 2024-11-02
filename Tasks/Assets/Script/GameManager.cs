@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public int countTrack, numberOfMoves;
     public bool victorybool, losebool, tochLock;
     public GameObject[] slotePoss;
-    public GameObject[] contSlotePos;
     public GameObject isContin;
     public ParticleSystem smoke;
     public float speed;
@@ -17,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     //private GameObject[] contSlote = new GameObject[3];
     private GameObject[] slote = new GameObject[5];
-    private GameObject[] contGre = new GameObject[3],contOrg = new GameObject[3];
+    private GameObject[] contGre = new GameObject[5],contOrg = new GameObject[5];
     private int countGre,countOrg,sigma;
     private bool spic;
     private void Start()
@@ -26,10 +25,10 @@ public class GameManager : MonoBehaviour
         {
             gameManagerInstance = this;
         }
-        MoveToShip();
+
         countTrack = GameObject.FindGameObjectsWithTag("Path").Length;
-        numberOfMoves = countTrack + 5;
-        sigma = -1;
+        numberOfMoves = countTrack + 3;
+        
     }
     public void Victory()
     {
@@ -64,39 +63,15 @@ public class GameManager : MonoBehaviour
 
                     if (slote[i].name == org)
                     {
-                        contOrg[countOrg] = slote[i];
+                        contOrg[i] = slote[i];
                         countOrg++;
-                        if (countOrg == 3)
-                        {
-                          /*  for (int l = 0; l < slote.Length ; l++)
-                            {
-                                for (int k = 0; k < contOrg.Length ; k++)
-                                {
-                                    if (contOrg[k].name == slote[l].name)
-                                    {
-                                        slote[l] = null;
-                                        spic = false;
-                                    }
-                                    break;
-                                }
-
-                            }*/
-                            
-
-
-                          
-                        }
+                      
                     }
                     else if(slote[i].name == gre)
                     {
-                        contGre[countGre] = slote[i];
+                        contGre[i] = slote[i];
                         countGre++;
 
-                        if (countGre == 3)
-                        {
-                            
-
-                        }
                     }
 
                 }
@@ -113,49 +88,59 @@ public class GameManager : MonoBehaviour
         {
             isContin.transform.position = Vector3.MoveTowards(isContin. transform.position, slotePoss[sigma].transform.position, speed );
             isContin.transform.localEulerAngles = new Vector3(0, 180, 0);
-           
+            if (isContin.transform.position == slotePoss[sigma].transform.position)
+            {
+                spic = false;
+            }
         }
        
     }
-    private void MoveToShip()
-    {
 
-        BoatMove.boatMoveInstance.starter = true;
-
-    }
     private void Update()
     {
         MoveToSlote();
     }
-   
   
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Green"))
         {
-            Debug.Log("hit");
+            Debug.Log("hitGre");
             BoatMove.boatMoveInstance.starter = false;
 
             if (countGre == 3)
             {
-                contGre[0].SetActive(false);
-                contGre[1].SetActive(false);
-                contGre[2].SetActive(false);
-                greBoat.transform.GetChild(0).gameObject.SetActive(true);
+               for(int i = 0; i < contGre.Length; i++)
+               {
+                    if (contGre[i] != null)
+                    {
+                        contGre[i].SetActive(false);
+                        slote[i]  = null;
+                        contGre[i] = null;
+                    }
+               }
+              
+                greBoat.transform.GetChild(0).gameObject.SetActive(true); //for containers;
                 BoatMove.boatMoveInstance.starter = true;
             }
         }
         if (other.gameObject.CompareTag("Orange"))
         {
-            Debug.Log("hit");
+            Debug.Log("hitOrg");
             BoatMove.boatMoveInstance.starter = false;
 
             if (countOrg == 3)
             {
-                contOrg[0].SetActive(false);
-                contOrg[1].SetActive(false);
-                contOrg[2].SetActive(false);
-                orgBoat.transform.GetChild(0).gameObject.SetActive(true);
+                for (int i = 0; i < contOrg.Length; i++)
+                {
+                    if (contOrg[i] != null)
+                    {
+                        contOrg[i].SetActive(false);
+                        slote[i] = null;
+                        contOrg[i] = null;
+                    }
+                }
+                orgBoat.transform.GetChild(0).gameObject.SetActive(true);  //for containers;
                 BoatMove.boatMoveInstance.starter = true;
 
             }
@@ -165,7 +150,12 @@ public class GameManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Green"))
         {
-            orgBoat.AddComponent<BoatMove>();
+            if(!GetComponent<BoatMove>())
+            {
+                orgBoat.GetComponent<BoatMove>().enabled = true;
+                Debug.Log("hitExit");
+
+            }
 
         }
     }

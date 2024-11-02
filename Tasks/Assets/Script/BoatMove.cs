@@ -13,6 +13,7 @@ public class BoatMove : MonoBehaviour
     {
         speed = 1;
         boatMoveInstance = this;
+        starter = true;
     }
 
     // Update is called once per frame
