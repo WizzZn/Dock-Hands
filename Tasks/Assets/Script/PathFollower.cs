@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using PathCreation;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 
 // Moves along a path at constant speed.
 // Depending on the end of path instruction, will either loop, reverse, or stop at the end of the path.
@@ -25,16 +25,13 @@ public abstract class PathFollower : MonoBehaviour
             // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
             pathCreator.pathUpdated += OnPathChanged;
         }
-       
     }
-
     void Update()
     {
 
         SelectCar();
         MoveTheCar(moveCar);
     }
-
     private void SelectCar()
     {
         if (Input.GetMouseButtonDown(0) && GameManager.gameManagerInstance.tochLock)
@@ -60,47 +57,34 @@ public abstract class PathFollower : MonoBehaviour
         if (pathCreator != null && move)
         {
             float distance = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
-
             if (!reverse)
             {
                 distanceTravelled += speed * Time.deltaTime;
-
             }
             else
             {
                 distanceTravelled -= speed * Time.deltaTime;
-
             }
-
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
             transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
-
             if (distance >= pathCreator.path.length && !reverse) // means reached to end of the road 
             {
                 moveCar = false;
 
-                GameManager.gameManagerInstance.countTrack--;
                 GameManager.gameManagerInstance.Victory();
                 GameManager.gameManagerInstance.Lose();
-
+               
             }
-
             if (distance <= 0f && reverse) // means the car will be initeal pos 
             {
                 endOfPathInstruction = EndOfPathInstruction.Stop;
                 moveCar = false;
                 reverse = false;
-
-                GameManager.gameManagerInstance.numberOfMoves--;
-
-                GameManager.gameManagerInstance.Victory();
-                GameManager.gameManagerInstance.Lose();
-
-
+                //GameManager.gameManagerInstance.Victory();
+               // GameManager.gameManagerInstance.Lose();
             }
         }
     }
-
     // If the path changes during the game, update the distance travelled so that the follower's position on the new path
     // is as close as possible to its position on the old path
     void OnPathChanged()
