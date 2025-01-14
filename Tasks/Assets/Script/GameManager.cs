@@ -26,16 +26,25 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        foreach(var particle in smoke)
+       
+    }
+    private void Start()
+    {
+        foreach (var particle in smoke)
         {
-            particle?.Stop();
+            if (particle != null)
+            {
+                particle.Stop();
+
+            }
+            else
+            {
+                Debug.Log("Particle is null");
+            }
         }
 
         boatIntex = 0;
         boatList[boatIntex].GetComponent<BoatMove>().starter = true;
-    }
-    private void Start()
-    {
         //#region GameManagerInstance
         if (gameManagerInstance == null)
         {
