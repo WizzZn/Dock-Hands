@@ -80,8 +80,7 @@ public abstract class PathFollower : MonoBehaviour
                 endOfPathInstruction = EndOfPathInstruction.Stop;
                 moveCar = false;
                 reverse = false;
-                //GameManager.gameManagerInstance.Victory();
-               // GameManager.gameManagerInstance.Lose();
+                
             }
         }
     }

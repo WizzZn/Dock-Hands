@@ -51,10 +51,11 @@ public class CarManager : PathFollower
             _rigidbody.isKinematic = _collider.isTrigger = false;
             other.GetComponent<Rigidbody>().AddForceAtPosition(other.transform.position * 50, other.transform.position);
             Invoke("TimeDelay", 2f);
+            GameManager.gameManagerInstance.TochControll();
         }
 
 
-        if (other.CompareTag("Continer"))
+        if (other.CompareTag("Continer"))// Reach the Continner;
         {
             var paths = GameObject.FindGameObjectsWithTag("Path");
             var roads = GameObject.FindGameObjectsWithTag("Road");
@@ -93,7 +94,8 @@ public class CarManager : PathFollower
             moveCar = true;
             GameManager.gameManagerInstance.tochLock = true;
             Debug.Log($"Car crashed with Continer : {other.gameObject}");
-           
+            GameManager.gameManagerInstance.TochControll();
+
         }
     }
     private void TimeDelay()

@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772f78a9f3167ee469a1d7f96e273eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pusePannel: {fileID: 0}
-  settingsPannel: {fileID: 0}
+  comSoonPannel: {fileID: 3935892349907416005, guid: 9919b8d3388dbb84eb4d57f0b5ad3085, type: 3}
+  winPannel: {fileID: 2948868177516897156, guid: 3a20813455661a842a0910c7744b15ef, type: 3}
+  losePannel: {fileID: 2734428477040483446, guid: 54cc2576e390fbb43aed3647138a97f4, type: 3}

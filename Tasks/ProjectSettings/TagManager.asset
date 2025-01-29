@@ -11,6 +11,7 @@ TagManager:
   - Green
   - Orange
   - HitContiner
+  - Red
   layers:
   - Default
   - TransparentFX

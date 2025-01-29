@@ -9,11 +9,21 @@ using System.Runtime.CompilerServices;
 
 public class Buttons : MonoBehaviour
 {
-
+    public static Buttons buttonsInstance;
     public GameObject comSoonPannel;
+    public GameObject audioManager;
+
+    private string buttonName;
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (buttonsInstance != null && buttonsInstance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            buttonsInstance = this;
+        }
     }
     // Start is called before the first frame update
     void Start()
@@ -26,6 +36,7 @@ public class Buttons : MonoBehaviour
     {
         
     }
+    
 
     public void PannelOpenCloss(GameObject pannelObj)
     {
@@ -57,7 +68,7 @@ public class Buttons : MonoBehaviour
     public void LevelSelect(Button levelBt)
     {
         bool SceneExected = false;
-            string buttonName = levelBt.name;
+            buttonName = levelBt.name;
             foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
             {
                 if (scene.path.Contains(buttonName))
@@ -75,10 +86,20 @@ public class Buttons : MonoBehaviour
             comSoonPannel.SetActive(true);
         }
     }
+    public void NextLevel()
+    {
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+    }
+    public void RePlay()
+    {
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     public void Back()
     {
         SceneManager.LoadScene($"Lobby");
-
+        
     }
     public void About()
     {

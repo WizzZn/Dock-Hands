@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public ParticleSystem [] smoke;
     public TextMeshProUGUI chanceText;
     public TextMeshProUGUI TrackText;
+    public GameObject winPannel,losePannel;
+    
 
     private GameObject[] slote = new GameObject[5];
     private GameObject[] contGre = new GameObject[5],contOrg = new GameObject[5];
@@ -26,7 +28,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-       
+        winPannel.SetActive(false);
+        losePannel.SetActive(false);
     }
     private void Start()
     {
@@ -62,17 +65,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("GameManager instance is null!");
         }
-        if (numberOfMoves <= 0)
-        {
-            tochLock = false;
-            Debug.LogError($"Touch Locked for number of Move is Null : {numberOfMoves}");
-
-        }
+       
         chanceText.text = numberOfMoves.ToString();
         TrackText.text = countTrack + "/" + trackComplete;
         MoveToSlote();
         Victory();
+        Lose();
         BoatMovement();
+        
     }
     public int TrackComplete
     {
@@ -91,14 +91,17 @@ public class GameManager : MonoBehaviour
         if (countTrack == trackComplete && !losebool)
         {
             victorybool = true;
-            Debug.Log("U Won!");
+            winPannel.SetActive(true);
+            Debug.Log("U Win");
+
         }
     }
     public void Lose()
     {
-        if (losebool || numberOfMoves == 0 && !victorybool)
+        if (losebool && !victorybool)
         {
-            Debug.Log("U Lose!!");
+            losePannel.SetActive(true);
+            Debug.Log("U Losss");
         }
     }
     public void Sloting()
@@ -106,7 +109,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < slote.Length; i++)
         {
             if (slote[i] == null)
-            {
+            {   
                 slote[i] = isContin;
                 TrackComplete++;
                 MoveToSlote();
@@ -132,28 +135,22 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             }
-            else
-            {
-                int h = 0;
-                for(int k = 0; k < slote.Length; k++)
-                {
-                    if (slote[k] != null)
-                    {
-                        h++;
-                        //Debug.Log($"H value{h}");
-                        if(h == slote.Length)
-                        {
-                            losebool = true;
-                            Lose();
-                            
-                        }
-                    }
-                }
-                h = 0;
-            }
+           
 
         }
 
+    }
+    public void TochControll()// for checking Num of Move;
+    {
+        Debug.Log($"TouchControll Checking  : {numberOfMoves} - Moves Left ");
+
+        if (numberOfMoves <= 0 && !victorybool)
+        {
+            tochLock = false;
+            Debug.Log($"Touch Locked for number of Move is Null");
+            losebool = true;
+            Lose();
+        }
     }
     private void MoveToSlote()
     {
@@ -166,6 +163,22 @@ public class GameManager : MonoBehaviour
                 spic = false;
                 smoke[sloteIntex].Play();
 
+                int h = 0;
+                for (int k = 0; k < slote.Length; k++)
+                {
+                    if (slote[k] != null)
+                    {
+                        h++;
+                        if (h == slote.Length)
+                        {
+                            losebool = true;
+                            Lose();
+                        }
+                    }
+                }
+                h = 0;
+                TochControll();
+               
             }
         }
 
@@ -179,7 +192,7 @@ public class GameManager : MonoBehaviour
             boatList[boatIntex].GetComponent<BoatMove>().starter = false;
 
 
-            if (countGre == 3 && !spic)//!spic Use for Delaying Worke
+            if (countGre == 3 && !spic)//!spic Use for Delaying Work
             {
                for(int i = 0; i < contGre.Length; i++)
                {
@@ -220,6 +233,30 @@ public class GameManager : MonoBehaviour
                 boatbool = true;
             }
         }
+        if (other.gameObject.CompareTag("Red") && boatIntex < boatList.Length && other.gameObject.name == boatList[boatIntex]?.name)
+        {
+
+            boatList[boatIntex].GetComponent<BoatMove>().starter = false;
+
+            if (countOrg == 3 && !spic)//!spic Use for Delaying Worke
+            {
+                for (int i = 0; i < contOrg.Length; i++)
+                {
+                    if (contOrg[i] != null)
+                    {
+                        contOrg[i].SetActive(false);
+                        slote[i] = null;
+                        contOrg[i] = null;
+                    }
+                }
+                boatList[boatIntex]?.transform.GetChild(0).gameObject.SetActive(true);  //for containers;
+                boatList[boatIntex].GetComponent<BoatMove>().starter = true;
+                boatList[boatIntex].GetComponent<BoatMove>().speed = 4f;
+                boatIntex++;
+                boatbool = true;
+            }
+        }
+
         if (boatIntex >= boatList.Length)
         {
             Debug.Log("All boats have been used.");
@@ -239,4 +276,5 @@ public class GameManager : MonoBehaviour
            
         }
     }
+    
 }
