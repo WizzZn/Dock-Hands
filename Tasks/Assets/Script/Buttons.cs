@@ -11,7 +11,12 @@ public class Buttons : MonoBehaviour
 {
     public static Buttons buttonsInstance;
     public GameObject comSoonPannel;
-    public GameObject audioManager;
+    public AudioSource sfxManager;
+    public AudioClip errorClip;
+    public AudioClip SelectClip;
+    public AudioClip winClip;
+    public AudioClip levelClip;
+    public AudioClip contClip;
 
     private string buttonName;
     private void Awake()
@@ -43,27 +48,33 @@ public class Buttons : MonoBehaviour
         if (pannelObj.activeSelf == true)
         {
             pannelObj.SetActive(false);
-           
+            sfxManager.clip = SelectClip;
+            sfxManager.Play();
         }
         else
         {
             pannelObj.SetActive(true);
+            sfxManager.clip = SelectClip;
+            sfxManager.Play();
         }
     }
     public  void Settings()
     {
         SceneManager.LoadScene($"Settings");
-
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void Levels()
     {
         SceneManager.LoadScene($"Levels");
-
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void MainMenu()
     {
         SceneManager.LoadScene($"Lobby");
-
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void LevelSelect(Button levelBt)
     {
@@ -78,36 +89,47 @@ public class Buttons : MonoBehaviour
             }
         if (SceneExected)
         {
-               SceneManager.LoadScene($"{buttonName}");
-
+            SceneManager.LoadScene($"{buttonName}");
+            sfxManager.clip = levelClip;
+            sfxManager.Play();
         }
         else
         {
             comSoonPannel.SetActive(true);
+            sfxManager.clip = errorClip;
+            sfxManager.Play();
         }
     }
     public void NextLevel()
     {
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void RePlay()
     {
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void Back()
     {
         SceneManager.LoadScene($"Lobby");
-        
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void About()
     {
         SceneManager.LoadScene($"About");
-
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
     public void Quit()
     {
-
+        Application.Quit();
+        sfxManager.clip = SelectClip;
+        sfxManager.Play();
     }
 }

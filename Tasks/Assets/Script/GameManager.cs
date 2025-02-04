@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI chanceText;
     public TextMeshProUGUI TrackText;
     public GameObject winPannel,losePannel;
-    
 
-    private GameObject[] slote = new GameObject[5];
+    [SerializeField] List<GameObject> slote;
+    //private GameObject[] slote = new GameObject[5];
     private GameObject[] contGre = new GameObject[5],contOrg = new GameObject[5];
-    private int countGre,countOrg,sloteIntex, trackComplete,boatIntex;
+    private int countGre,countOrg,sloteIntex = 0, trackComplete,boatIntex;
     private bool spic,boatbool;
           
 
@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        slote = new List<GameObject>();
+
         foreach (var particle in smoke)
         {
             if (particle != null)
@@ -53,6 +55,10 @@ public class GameManager : MonoBehaviour
         {
             gameManagerInstance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         countTrack = GameObject.FindGameObjectsWithTag("Path").Length;
         numberOfMoves = countTrack + 3;
@@ -69,8 +75,6 @@ public class GameManager : MonoBehaviour
         chanceText.text = numberOfMoves.ToString();
         TrackText.text = countTrack + "/" + trackComplete;
         MoveToSlote();
-        Victory();
-        Lose();
         BoatMovement();
         
     }
@@ -88,12 +92,13 @@ public class GameManager : MonoBehaviour
     }
     public void Victory()
     {
-        if (countTrack == trackComplete && !losebool)
+        if ( victorybool && !losebool)
         {
-            victorybool = true;
+          
             winPannel.SetActive(true);
             Debug.Log("U Win");
-
+            Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.winClip;
+            Buttons.buttonsInstance.sfxManager.Play();
         }
     }
     public void Lose()
@@ -106,36 +111,36 @@ public class GameManager : MonoBehaviour
     }
     public void Sloting()
     {
-        for (int i = 0; i < slote.Length; i++)
+        for (int i = 0; i < countTrack; i++)
         {
-            if (slote[i] == null)
-            {   
-                slote[i] = isContin;
+                slote.Add(isContin);
+                if (slote.Count > 1)
+                {
+                  sloteIntex = sloteIntex + 1;
+
+                }
                 TrackComplete++;
                 MoveToSlote();
                 tochLock = true;
-                sloteIntex = i;
                 spic = true;
-                for (int j = 1; j < 4; j++)
+                string containerName = isContin.name;
+                if (orgbool && containerName.StartsWith("Cont_Org_"))
                 {
-                    string org = "Cont_Org_" + j.ToString();
-                    string gre = "Cont_Gre_" + j.ToString();
+                    contOrg[i] = slote[i];
+                    countOrg++;
 
-                    if (slote[i].name == org && orgbool)
-                    {
-                        contOrg[i] = slote[i];
-                        countOrg++;
-
-                    }
-                    else if(slote[i].name == gre && grebool)
-                    {
-                        contGre[i] = slote[i];
-                        countGre++;
-                    }
                 }
+                else if (/*slote[i].name == gre*/  grebool && containerName.StartsWith("Cont_Gre_"))
+                {
+                    contGre[i] = slote[i];
+                    countGre++;
+                }
+
                 break;
-            }
-           
+            /*if (slote[i] == null)
+            {
+            }*/
+
 
         }
 
@@ -162,21 +167,23 @@ public class GameManager : MonoBehaviour
             {
                 spic = false;
                 smoke[sloteIntex].Play();
+                Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.contClip;
+                Buttons.buttonsInstance.sfxManager.Play();
 
                 int h = 0;
-                for (int k = 0; k < slote.Length; k++)
+               /* for (int k = 0; k < countTrack; k++)
                 {
                     if (slote[k] != null)
                     {
                         h++;
-                        if (h == slote.Length)
+                        if (h == countTrack)
                         {
                             losebool = true;
                             Lose();
                         }
                     }
                 }
-                h = 0;
+                h = 0;*/
                 TochControll();
                
             }
@@ -260,6 +267,8 @@ public class GameManager : MonoBehaviour
         if (boatIntex >= boatList.Length)
         {
             Debug.Log("All boats have been used.");
+            victorybool = true;
+            Victory();
         }
     }
    

@@ -47,6 +47,8 @@ public abstract class PathFollower : MonoBehaviour
                         moveCar = true;
                         GameManager.gameManagerInstance.numberOfMoves--;
                         GameManager.gameManagerInstance.tochLock = false;
+                        Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.winClip;
+                        Buttons.buttonsInstance.sfxManager.Play();
                     }
                 }
             }
@@ -71,8 +73,7 @@ public abstract class PathFollower : MonoBehaviour
             {
                 moveCar = false;
 
-                GameManager.gameManagerInstance.Victory();
-                GameManager.gameManagerInstance.Lose();
+              
                
             }
             if (distance <= 0f && reverse) // means the car will be initeal pos 

@@ -45,5 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comSoonPannel: {fileID: 3935892349907416005, guid: 9919b8d3388dbb84eb4d57f0b5ad3085, type: 3}
-  winPannel: {fileID: 2948868177516897156, guid: 3a20813455661a842a0910c7744b15ef, type: 3}
-  losePannel: {fileID: 2734428477040483446, guid: 54cc2576e390fbb43aed3647138a97f4, type: 3}
+  sfxManager: {fileID: 5737213655938033286, guid: f147521c002545c489c255af0a355268, type: 3}
+  errorClip: {fileID: 8300000, guid: e6b02ab0454acb342949fae6c51476fc, type: 3}
+  SelectClip: {fileID: 8300000, guid: ee4946b7dee63ce4c8813ab23dc99705, type: 3}
+  winClip: {fileID: 8300000, guid: ac39e843364334b4fa9567afbac9a3ca, type: 3}
+  levelClip: {fileID: 8300000, guid: 9c330df4825c2e24b98bb3013e0606b6, type: 3}
+  contClip: {fileID: 8300000, guid: f27e577ca7db7684fa448373580cf4ce, type: 3}
