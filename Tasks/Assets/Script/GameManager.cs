@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Game God Settings")]
     public int countTrack, numberOfMoves;
-    public bool victorybool, losebool, tochLock,grebool,orgbool;//for lock the values 
+    public bool victorybool, losebool, tochLock,grebool,orgbool,accessbool;//for lock the values 
     public float speed;
     public GameObject[] slotePoss, boatList;
     public GameObject isContin;
@@ -20,9 +20,14 @@ public class GameManager : MonoBehaviour
     public GameObject winPannel,losePannel;
 
     [SerializeField] List<GameObject> slote;
-    //private GameObject[] slote = new GameObject[5];
-    private GameObject[] contGre = new GameObject[5],contOrg = new GameObject[5];
-    private int countGre,countOrg,sloteIntex = 0, trackComplete,boatIntex;
+    [SerializeField] List<GameObject> contGre;
+    [SerializeField] List<GameObject> contOrg;
+    [SerializeField] List<GameObject> contRed;
+
+
+
+    //private GameObject[] contGre = new GameObject[5],contOrg = new GameObject[5],contRed = new GameObject[5];
+    private int countGre,countOrg,countRed,sloteIntex = 0, trackComplete,boatIntex;
     private bool spic,boatbool;
           
 
@@ -34,6 +39,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         slote = new List<GameObject>();
+        for (int i = 0; i < slotePoss.Length; i++)
+        {
+            slote.Add(null);
+            contGre.Add(null);
+            contOrg.Add(null);
+            contRed.Add(null);
+        }
+        //contOrg = new List<GameObject> ();
+        //contRed = new List<GameObject> ();
 
         foreach (var particle in smoke)
         {
@@ -78,6 +92,10 @@ public class GameManager : MonoBehaviour
         BoatMovement();
         
     }
+    private void LateUpdate()
+    {
+       
+    }
     public int TrackComplete
     {
         get
@@ -111,43 +129,50 @@ public class GameManager : MonoBehaviour
     }
     public void Sloting()
     {
-        for (int i = 0; i < countTrack; i++)
+        if (sloteIntex >= 0 && slotePoss.Length > sloteIntex) 
         {
-                slote.Add(isContin);
-                if (slote.Count > 1)
-                {
-                  sloteIntex = sloteIntex + 1;
-
-                }
-                TrackComplete++;
-                MoveToSlote();
-                tochLock = true;
-                spic = true;
-                string containerName = isContin.name;
-                if (orgbool && containerName.StartsWith("Cont_Org_"))
-                {
-                    contOrg[i] = slote[i];
-                    countOrg++;
-
-                }
-                else if (/*slote[i].name == gre*/  grebool && containerName.StartsWith("Cont_Gre_"))
-                {
-                    contGre[i] = slote[i];
-                    countGre++;
-                }
-
-                break;
-            /*if (slote[i] == null)
+            for (int i = 0;i < slote.Count; i++)
             {
-            }*/
+                if (slote[i] == null)
+                {
+                    slote[i] = isContin;
+                    sloteIntex = i;
+                    TrackComplete++;
+                    MoveToSlote();
+                    tochLock = true;
+                    spic = true;
+                    string containerName = isContin.name;
+                    if (orgbool && containerName.StartsWith("Cont_Org_"))
+                    {
+                        contOrg[sloteIntex] = slote[sloteIntex];
+                        countOrg++;
 
+                    }
+                    else if (grebool && containerName.StartsWith("Cont_Gre_"))
+                    {
+                        contGre[sloteIntex] = slote[sloteIntex];
+                        countGre++;
+                    }
+                    else if (grebool && containerName.StartsWith("Cont_Red_"))
+                    {
+                        contRed[sloteIntex] = slote[sloteIntex];
+                        countRed++;
+                    }
+                    break;
+                }
+               
+            }
 
         }
-
+        else
+        {
+            Debug.LogError("Out of Slote List");
+        }
+               
     }
     public void TochControll()// for checking Num of Move;
     {
-        Debug.Log($"TouchControll Checking  : {numberOfMoves} - Moves Left ");
+        //Debug.Log($"TouchControll Checking  : {numberOfMoves} - Moves Left ");
 
         if (numberOfMoves <= 0 && !victorybool)
         {
@@ -167,25 +192,12 @@ public class GameManager : MonoBehaviour
             {
                 spic = false;
                 smoke[sloteIntex].Play();
-                Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.contClip;
+                Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.winClip;
                 Buttons.buttonsInstance.sfxManager.Play();
 
-                int h = 0;
-               /* for (int k = 0; k < countTrack; k++)
-                {
-                    if (slote[k] != null)
-                    {
-                        h++;
-                        if (h == countTrack)
-                        {
-                            losebool = true;
-                            Lose();
-                        }
-                    }
-                }
-                h = 0;*/
                 TochControll();
-               
+                Invoke("SloteCheck", 1f);
+                Debug.Log("MoveTOslote Invoke Checking");
             }
         }
 
@@ -201,7 +213,7 @@ public class GameManager : MonoBehaviour
 
             if (countGre == 3 && !spic)//!spic Use for Delaying Work
             {
-               for(int i = 0; i < contGre.Length; i++)
+               for(int i = 0; i < contGre.Count; i++)
                {
                     if (contGre[i] != null)
                     {
@@ -224,13 +236,14 @@ public class GameManager : MonoBehaviour
 
             if (countOrg == 3 && !spic)//!spic Use for Delaying Worke
             {
-                for (int i = 0; i < contOrg.Length; i++)
+                for (int i = 0; i < contOrg.Count; i++)
                 {
                     if (contOrg[i] != null)
                     {
                         contOrg[i].SetActive(false);
                         slote[i] = null;
                         contOrg[i] = null;
+
                     }
                 }
                 boatList[boatIntex]?.transform.GetChild(0).gameObject.SetActive(true);  //for containers;
@@ -245,15 +258,16 @@ public class GameManager : MonoBehaviour
 
             boatList[boatIntex].GetComponent<BoatMove>().starter = false;
 
-            if (countOrg == 3 && !spic)//!spic Use for Delaying Worke
+            if (countRed == 3 && !spic)//!spic Use for Delaying Worke
             {
-                for (int i = 0; i < contOrg.Length; i++)
+                for (int i = 0; i < contRed.Count; i++)
                 {
-                    if (contOrg[i] != null)
+                    if (contRed[i] != null)
                     {
-                        contOrg[i].SetActive(false);
+                        contRed[i].SetActive(false);
                         slote[i] = null;
-                        contOrg[i] = null;
+                        contRed[i] = null;
+
                     }
                 }
                 boatList[boatIntex]?.transform.GetChild(0).gameObject.SetActive(true);  //for containers;
@@ -283,6 +297,31 @@ public class GameManager : MonoBehaviour
                 boatbool = false;
             }
            
+        }
+    }
+    private void SloteCheck()
+    {
+        if (!spic)
+        {
+            int h = 0;
+            for (int k = 0; k < slote.Count; k++)
+            {
+                if (slote[k] != null && !victorybool)
+                {
+                    h++;
+                    if (h == slote.Count)
+                    {
+                        Debug.Log("toch Checking + lose conformed");
+
+                        losebool = true;
+                        Lose();
+                        tochLock = false;
+                        break;
+                    }
+                }
+            }
+            h = 0;
+            accessbool = false;
         }
     }
     

@@ -47,7 +47,7 @@ public abstract class PathFollower : MonoBehaviour
                         moveCar = true;
                         GameManager.gameManagerInstance.numberOfMoves--;
                         GameManager.gameManagerInstance.tochLock = false;
-                        Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.winClip;
+                        Buttons.buttonsInstance.sfxManager.clip = Buttons.buttonsInstance.tochClip;
                         Buttons.buttonsInstance.sfxManager.Play();
                     }
                 }

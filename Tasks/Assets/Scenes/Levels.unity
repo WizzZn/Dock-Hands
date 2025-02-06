@@ -8632,6 +8632,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coming Soon Pannel
       objectReference: {fileID: 0}
+    - target: {fileID: 3935892349907416005, guid: 9919b8d3388dbb84eb4d57f0b5ad3085, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

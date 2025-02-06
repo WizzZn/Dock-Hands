@@ -50,4 +50,4 @@ MonoBehaviour:
   SelectClip: {fileID: 8300000, guid: ee4946b7dee63ce4c8813ab23dc99705, type: 3}
   winClip: {fileID: 8300000, guid: ac39e843364334b4fa9567afbac9a3ca, type: 3}
   levelClip: {fileID: 8300000, guid: 9c330df4825c2e24b98bb3013e0606b6, type: 3}
-  contClip: {fileID: 8300000, guid: f27e577ca7db7684fa448373580cf4ce, type: 3}
+  tochClip: {fileID: 8300000, guid: f27e577ca7db7684fa448373580cf4ce, type: 3}

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Runtime.CompilerServices;
+using System.Linq;
 
 public class Buttons : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Buttons : MonoBehaviour
     public AudioClip SelectClip;
     public AudioClip winClip;
     public AudioClip levelClip;
-    public AudioClip contClip;
+    public AudioClip tochClip;
 
     private string buttonName;
     private void Awake()
@@ -102,10 +103,20 @@ public class Buttons : MonoBehaviour
     }
     public void NextLevel()
     {
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
-        sfxManager.clip = SelectClip;
-        sfxManager.Play();
+       
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+            sfxManager.clip = SelectClip;
+            sfxManager.Play();
+        }
+        else
+        {
+            comSoonPannel.SetActive(true);
+            sfxManager.clip = errorClip;
+            sfxManager.Play();
+        }
     }
     public void RePlay()
     {

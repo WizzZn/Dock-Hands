@@ -42,7 +42,7 @@ public class BoatMove : MonoBehaviour
             transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime, Space.World);
             if (boatDistanse < 0.1f) //Boat stop @ x = 30f
             {
-                Debug.Log("boat Dead");
+                Debug.Log($"boat Dead : {gameObject.name}");
                 gameObject.SetActive(false);
                 starter = false;
             }
