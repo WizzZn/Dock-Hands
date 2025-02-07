@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+
+using UnityEngine;
 using PathCreation;
 //using Unity.VisualScripting;
 
@@ -107,3 +109,4 @@ public abstract class PathFollower : MonoBehaviour
         }
     }
 }
+#endif

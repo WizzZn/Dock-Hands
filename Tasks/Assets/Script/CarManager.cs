@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using PathCreation;
 using System.Collections;
 using System.Collections.Generic;
@@ -103,3 +105,4 @@ public class CarManager : PathFollower
         _rigidbody.isKinematic = _collider.isTrigger = true;
     }
 }
+#endif
